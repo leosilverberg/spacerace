@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+</head>
+
+<body>
+
+	<div id="gameArea">
+
+	</div>
+
+	<script id="intro-screen-template" type="text/template">
+		<button id="btnJoinGame" class"btn">JOIN A GAME</button>
+	 	<button id="btnCreateGame" class="btn left">CREATE</button>
+	 </script>
+
+	 <script id="create-game-template" type="text/template">
+	 	<p>enter the following:</p>
+	 	<div id="spanNewGameCode">ERROR!</div>
+	 </script>
+
+	 <script id="join-game-template" type="text/template">
+	 	<label for="inputPlayerName">Your name: </label>
+	 	<input id="inputPlayerName" type="text" />
+
+	 	<label for="inputGameId">enter a game id</label>
+	 	<input id="inputGameId" type="text" />
+
+	 	<button id="btnStart" class="btn"> START </button>
+	 </script>
+
+
+
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="app.js"></script>
+</body>
+</html>
