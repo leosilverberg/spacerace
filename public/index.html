@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<link rel="stylesheet" href="style.css">
 
 </head>
 
 <body>
+	<canvas id="canvas"></canvas>
 
 	<div id="gameArea">
 
@@ -15,10 +17,13 @@
 	 	<button id="btnCreateGame" class="btn left">CREATE</button>
 	 </script>
 
+
 	 <script id="create-game-template" type="text/template">
 	 	<p>enter the following:</p>
 	 	<div id="spanNewGameCode">ERROR!</div>
+	 	<div id="playersWaiting"></div>
 	 </script>
+
 
 	 <script id="join-game-template" type="text/template">
 	 	<label for="inputPlayerName">Your name: </label>

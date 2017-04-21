@@ -6,6 +6,9 @@ var path = require('path');
 //express instace
 var app = express();
 
+//ip
+var ip = require('ip');
+
 //import game logic
 var sr = require('./spaceracegame');
 
@@ -24,5 +27,5 @@ var io = require('socket.io').listen(server);
 
 io.sockets.on('connection', function (socket){
 	console.log('[SOCKET]client connected');
-	sr.initGame(io, socket);
+	sr.initGame(io, socket, ip.address());
 })
