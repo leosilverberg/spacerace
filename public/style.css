@@ -1,3 +1,30 @@
 canvas {
     background: #231C24;
 }
+
+#gameStatus{
+	color:green;
+	position:absolute;
+	top:10px;
+}
+
+#currentQuestion{
+	width:200px;
+	height:300px;
+	position: absolute;
+	top:100px;
+	left:100px;
+	background-color:white;
+	color:black;
+	display:none;
+}
+
+#playerQuestion{
+	position:absolute;
+	top:0;
+	left:0;
+	width:100vw;
+	height:100vh;
+	background-color: white;
+	display:none;
+}

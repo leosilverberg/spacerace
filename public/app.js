@@ -33,6 +33,8 @@ jQuery(function($){
 			IO.socket.on('connected', IO.onConnected);
 			IO.socket.on('newGameCreated', IO.onNewGameCreated);
 			IO.socket.on('playerJoinedRoom', IO.playerJoinedRoom );
+			IO.socket.on('newQuestionData', IO.onNewQuestionData);
+			IO.socket.on('hostCheckAnswer', IO.hostCheckAnswer)
 		},
 
 		onConnected: function(data){
@@ -48,6 +50,17 @@ jQuery(function($){
    			console.log("heyoooo)");
             App[App.myRole].updateWaitingScreen(data);
         },
+
+        onNewQuestionData: function(data){
+        	console.log("got new question");
+        	App[App.myRole].newQuestion(data);
+        },
+
+        hostCheckAnswer: function(data){
+        	if(App.myRole === 'Host'){
+        		App.Host.checkAnswer(data);
+        	}
+        }
 		
 
 	};
@@ -81,6 +94,8 @@ jQuery(function($){
 			App.$doc.on('click', '#btnCreateGame', App.Host.onCreateClick);
 			App.$doc.on('click', '#btnJoinGame', App.Player.onJoinClick);
 			App.$doc.on('click', '#btnStart', App.Player.onStartClick);
+			App.$doc.on('click', '#btnStartGame', App.Host.onStartGameClick);
+			App.$doc.on('click', '.btnAnswer', App.Player.onPlayerAnswerClick);
 		},
 
 		/////GAME LOGIC///
@@ -95,6 +110,8 @@ jQuery(function($){
 			isNewGame : false,
 			numPlayersInRoom: 0,
 			board : {'steps':5},
+			currentQuestionData : "",
+			isQuestionActive: false,
 
 			onCreateClick: function(){
 				IO.socket.emit('hostCreateNewGame');
@@ -135,13 +152,67 @@ jQuery(function($){
 				console.log('Player '+data.playerName+' joined the game');
 			},
 
+			onStartGameClick: function(){
+				console.log("starting game");
+				 IO.socket.emit('hostStartGame', App.gameId);
+			},
+
+			newQuestion: function(data){
+				App.Host.isQuestionActive = true;
+				App.Host.currentQuestionData = data;
+				App.Host.renderBoard();
+			},
+
+			checkAnswer: function(data){
+				if(App.Host.currentQuestionData.answer === data.answer){
+					for(var i =0; i>App.Host.players.length; i++){
+						if(App.Host.players[i].playerId == data.playerId){
+							App.Host.playerRight(i);
+						}
+					}
+				}
+			},
+
+			playerRight: function(index){
+				
+			},
+
 			renderBoard: function(){
 				App.Host.renderBackground();
 
+
+				//playerBLOBS
     			context.fillStyle = "green";
     			for(var i = 0; i < App.Host.players.length ; i++){
-    				context.fillRect(App.Host.players[i].x,(110*i), 100,100);
+    				context.fillStyle = "green";
+    				context.fillRect(App.Host.players[i].x,(120*i)+50, 100,100);
+
+    				context.fillStyle = "white";
+    				context.fillText(App.Host.players[i].playerName, App.Host.players[i].x, (120*i)+50);
+    			};
+
+    			//playerSTATUS
+    			$('#gameStatus').empty();
+
+    			for(var i = 0; i < App.Host.players.length ; i++){
+    				$('#gameStatus').append(App.Host.players[i].playerName+", "); 
+    			};
+
+    			if(App.Host.isQuestionActive){
+    				$('#currentQuestion').show();
+    				$('#currentQuestion').empty();
+    				$('#currentQuestion').append(App.Host.currentQuestionData.question);
+
+    				// var qWindowW = 300;
+    				// var qWindowH = 500;
+    				// context.fillStyle ="white";
+    				// context.fillRect((canvas.width/2) - (qWindowW/2),(canvas.height/2) - (qWindowH/2), qWindowW, qWindowH);
+
+    				// context.fillStyle = "black";
+    				// context.fillText(App.Host.currentQuestionData.question, (canvas.width/2) - (qWindowW/2),(canvas.height/2) - (qWindowH/2)+100);
     			}
+
+
 
     			
     			
@@ -167,6 +238,8 @@ jQuery(function($){
 		Player : {
 			hostSocketId:'',
 			myName:'',
+			isQuestionActive:false,
+			currentQuestionData:"",
 
 			onJoinClick: function(){
 				App.$gameArea.html(App.$templateJoinGame);
@@ -177,6 +250,7 @@ jQuery(function($){
 				var data = {
 					gameId : +($('#inputGameId').val()),
 					playerName : $('#inputPlayerName').val(),
+					playerId: mySocketId,
 					x : 0,
 					y : 0
 				};
@@ -197,6 +271,53 @@ jQuery(function($){
 
 					console.log("joined game waiting...");
 				}
+			},
+
+			newQuestion: function(data){
+				App.Player.isQuestionActive = true;
+				App.Player.currentQuestionData = data;
+				App.Player.renderBoard();
+			},
+
+			onPlayerAnswerClick: function(){
+				var $btn = $(this);
+				var answer = $btn.val();
+				console.log(answer);
+
+				var data = {
+					gameId:App.gameId,
+					playerId:App.mySocketId,
+					answer:answer,
+				};
+
+				IO.socket.emit('playerAnswer', data);
+			},
+
+			renderBoard: function(){
+				App.Player.renderBackground();
+
+				if(App.Player.isQuestionActive){
+    				$('#playerQuestion').show();
+    				// $('#playerQuestion').empty();
+    				$('#playerQ').append(App.Player.currentQuestionData.question);
+
+    				for(var i=0; i<App.Player.currentQuestionData.decoys.length; i++){
+    					$('#playerAnswers').append('<button class="btnAnswer" value="'+App.Player.currentQuestionData.decoys[i]+'">'+App.Player.currentQuestionData.decoys[i]+'</button>');
+    				};
+    				$('#playerAnswers').append('<button class="btnAnswer value="'+App.Player.currentQuestionData.answer+'">'+App.Player.currentQuestionData.answer+'</button>');
+    				
+
+
+    			}
+
+
+			},
+
+			renderBackground: function(){
+				context.fillStyle = '#231C24';      
+    			context.fillRect(0,0,canvas.width,canvas.height);
+
+				
 			}
 		}
 

@@ -11,12 +11,19 @@ exports.initGame = function(sio, socket, ip){
 
 	//host events
 	gameSocket.on('hostCreateNewGame', hostCreateNewGame);
+	gameSocket.on('hostStartGame', hostStartAGame);
 
 	//player event
 	gameSocket.on('playerJoinGame', playerJoinGame);
+	gameSocket.on('playerAnswer', playerAnswer);
 }
 
 ////HOST FUNCTIONS
+
+function hostStartAGame(gameId){
+	console.log("host start a game");
+	sendQuestion(gameId);
+}
 
 ///start button
 function hostCreateNewGame(){
@@ -54,4 +61,43 @@ function playerJoinGame(data) {
 		console.log("player failed to join game");
 		this.emit('error', {message: "this room is not"});
 	}
+};
+
+function playerAnswer(data){
+	io.sockets.in(data.gameId).emit('hostCheckAnswer', data);
 }
+
+
+///GAME LOGIC /////////
+
+function sendQuestion(gameId){
+	console.log("send question");
+	var data = getQuestion();
+	io.sockets.in(gameId).emit('newQuestionData', data);
+};
+
+function getQuestion(){
+	console.log("get question");
+	var q = qPool[getRandomInt(0,qPool.length-1)];
+	var qData = {
+		question : q.question,
+		answer : q.answer,
+		decoys : q.decoys
+	};
+
+	return qData;
+};
+
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+var qPool = [
+	{"question" : "Question 1?",
+	"answer": "right answer",
+	"decoys": ["decoy1", "decoy2", "decoy3"]},
+	{"question" : "Question 2?",
+	"answer": "right answer2",
+	"decoys": ["decoy1", "decoy2", "decoy3"]}
+]
+
