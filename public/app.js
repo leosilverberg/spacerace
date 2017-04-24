@@ -210,7 +210,7 @@ jQuery(function($){
 				$('#currentQuestion').hide();
 				if(App.Host.playersRight > 0){
 					console.log("moving players");
-					App.Host.movePlayers();
+					 //App.Host.movePlayers();
 				} else {
 					App.Host.renderBoard();
 				};
@@ -225,11 +225,22 @@ jQuery(function($){
 				//playerBLOBS
     			context.fillStyle = "green";
     			for(var i = 0; i < App.Host.players.length ; i++){
+    				if(App.Host.players[i].prevX < App.Host.players[i].x){
+    					context.fillStyle = "green";
+    				context.fillRect(App.Host.players[i].prevX+1,(120*i)+50, 100,100);
+
+    				context.fillStyle = "white";
+    				context.fillText(App.Host.players[i].playerName, App.Host.players[i].prevX+0.1, (120*i)+50);
+
+    				App.Host.players[i].prevX = App.Host.players[i].prevX+1;
+    			} else{
     				context.fillStyle = "green";
     				context.fillRect(App.Host.players[i].x,(120*i)+50, 100,100);
 
     				context.fillStyle = "white";
     				context.fillText(App.Host.players[i].playerName, App.Host.players[i].x, (120*i)+50);
+    			}
+    				
     			};
 
     			//playerSTATUS
@@ -267,13 +278,12 @@ jQuery(function($){
     			context.fillStyle = "green";
     			for(var i = 0; i < App.Host.players.length ; i++){
     				var stepsToTake = App.Host.players[i].x - App.Host.players[i].prevX;
-    				for(var s = 0; s <= stepsToTake; s = s+animSpeed){
-    					App.Host.renderBackground();
-    					context.fillStyle = "green";
-    					context.fillRect(App.Host.players[i].prevX+s,(120*i)+50, 100,100);
 
-    					context.fillStyle = "white";
-    					context.fillText(App.Host.players[i].playerName, App.Host.players[i].prevX+s, (120*i)+50);
+
+    				for(var s = 0; s <= stepsToTake; s = s+animSpeed){
+    					console.log(s);
+    					App.Host.players[i].x = App.Host.players[i].prevX+s; 
+
     				}
     				
     			};
@@ -392,4 +402,11 @@ jQuery(function($){
 
 	IO.init();
 	App.init();
+
+	setInterval(function(){
+			
+			App.Host.renderBoard();
+
+		
+		}, 40);
 });
