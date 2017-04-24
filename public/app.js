@@ -57,6 +57,7 @@ jQuery(function($){
         },
 
         hostCheckAnswer: function(data){
+        	console.log("host check answer");
         	if(App.myRole === 'Host'){
         		App.Host.checkAnswer(data);
         	}
@@ -112,6 +113,8 @@ jQuery(function($){
 			board : {'steps':5},
 			currentQuestionData : "",
 			isQuestionActive: false,
+			playerAnswered:0,
+			playersRight:0,
 
 			onCreateClick: function(){
 				IO.socket.emit('hostCreateNewGame');
@@ -164,16 +167,54 @@ jQuery(function($){
 			},
 
 			checkAnswer: function(data){
+				console.log("checking...");
+				App.Host.playerAnswered++;
 				if(App.Host.currentQuestionData.answer === data.answer){
-					for(var i =0; i>App.Host.players.length; i++){
+					console.log("right!");
+					for(var i =0; i<App.Host.players.length; i++){
 						if(App.Host.players[i].playerId == data.playerId){
+							console.log("player right");
 							App.Host.playerRight(i);
 						}
 					}
+				} else {
+					for(var i =0; i<App.Host.players.length; i++){
+						if(App.Host.players[i].playerId == data.playerId){
+							console.log("player wrong");
+							App.Host.playerWrong(i)
+						}
+					}
+					
 				}
 			},
 
 			playerRight: function(index){
+				App.Host.players[index].step++;
+				App.Host.players[index].prevX = App.Host.players[index].x;
+				App.Host.players[index].x = App.Host.players[index].step*(canvas.width/App.Host.board.steps);
+				App.Host.playersRight++;
+				if(App.Host.playerAnswered == App.Host.numPlayersInRoom){
+					App.Host.endRound();
+				}
+			},
+
+			playerWrong: function(index){
+				if(App.Host.playerAnswered == App.Host.numPlayersInRoom){
+					App.Host.endRound();
+				}
+			},
+
+			endRound: function(){
+				App.Host.isQuestionActive = false;
+				console.log("hiding");
+				$('#currentQuestion').hide();
+				if(App.Host.playersRight > 0){
+					console.log("moving players");
+					App.Host.movePlayers();
+				} else {
+					App.Host.renderBoard();
+				};
+
 				
 			},
 
@@ -218,6 +259,27 @@ jQuery(function($){
     			
 			},
 
+			movePlayers:function(){
+				
+
+				var animSpeed = 0.1;
+				//playerBLOBS
+    			context.fillStyle = "green";
+    			for(var i = 0; i < App.Host.players.length ; i++){
+    				var stepsToTake = App.Host.players[i].x - App.Host.players[i].prevX;
+    				for(var s = 0; s <= stepsToTake; s = s+animSpeed){
+    					App.Host.renderBackground();
+    					context.fillStyle = "green";
+    					context.fillRect(App.Host.players[i].prevX+s,(120*i)+50, 100,100);
+
+    					context.fillStyle = "white";
+    					context.fillText(App.Host.players[i].playerName, App.Host.players[i].prevX+s, (120*i)+50);
+    				}
+    				
+    			};
+    			
+			},
+
 			renderBackground: function(){
 				context.fillStyle = '#231C24';      
     			context.fillRect(0,0,canvas.width,canvas.height);
@@ -240,6 +302,7 @@ jQuery(function($){
 			myName:'',
 			isQuestionActive:false,
 			currentQuestionData:"",
+			currentStep:0,
 
 			onJoinClick: function(){
 				App.$gameArea.html(App.$templateJoinGame);
@@ -250,9 +313,12 @@ jQuery(function($){
 				var data = {
 					gameId : +($('#inputGameId').val()),
 					playerName : $('#inputPlayerName').val(),
-					playerId: mySocketId,
+					playerId: App.mySocketId,
 					x : 0,
-					y : 0
+					y : 0,
+					step: App.Player.currentStep,
+					prevX:0,
+					prevY:0
 				};
 
 				//send the gameId and playername to the server
@@ -304,7 +370,7 @@ jQuery(function($){
     				for(var i=0; i<App.Player.currentQuestionData.decoys.length; i++){
     					$('#playerAnswers').append('<button class="btnAnswer" value="'+App.Player.currentQuestionData.decoys[i]+'">'+App.Player.currentQuestionData.decoys[i]+'</button>');
     				};
-    				$('#playerAnswers').append('<button class="btnAnswer value="'+App.Player.currentQuestionData.answer+'">'+App.Player.currentQuestionData.answer+'</button>');
+    				$('#playerAnswers').append('<button class="btnAnswer" value="'+App.Player.currentQuestionData.answer+'">'+App.Player.currentQuestionData.answer+'</button>');
     				
 
 
