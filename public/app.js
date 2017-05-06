@@ -209,7 +209,7 @@ function star_render() {
 				App.$gameArea.html(App.$templateNewGame);
 
 				// $('#spanNewGameCode').text(App.gameId + " on " + App.myIp +"/join");
-				$('#spanNewGameCode').text(App.gameId + " on " + "192.168.0.15:8080" +"/join");
+				$('#spanNewGameCode').text(App.gameId + " on " + "spacerace.agency" +"/join");
 
 			},
 
