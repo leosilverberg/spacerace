@@ -12,10 +12,12 @@ exports.initGame = function(sio, socket, ip){
 	//host events
 	gameSocket.on('hostCreateNewGame', hostCreateNewGame);
 	gameSocket.on('hostStartGame', hostStartAGame);
+	gameSocket.on('roundEnd', hostStartAGame);
 
 	//player event
 	gameSocket.on('playerJoinGame', playerJoinGame);
 	gameSocket.on('playerAnswer', playerAnswer);
+	gameSocket.on('playerRoundEnd', playerRoundEnd);
 }
 
 ////HOST FUNCTIONS
@@ -29,7 +31,7 @@ function hostStartAGame(gameId){
 function hostCreateNewGame(){
     var thisGameId = ( Math.random() * 100000 ) | 0;
 
-	this.emit('newGameCreated', {gameId:thisGameId, mySocketId: this.id, ip: myIp});
+	this.emit('newGameCreated', {gameId:thisGameId, mySocketId: this.id, ip: myIp + ":8080"});
 
 
 
@@ -65,6 +67,10 @@ function playerJoinGame(data) {
 
 function playerAnswer(data){
 	io.sockets.in(data.gameId).emit('hostCheckAnswer', data);
+};
+
+function playerRoundEnd(data){
+	io.sockets.in(data.gameId).emit('playerEndRound', data);
 }
 
 
@@ -93,11 +99,25 @@ function getRandomInt(min, max) {
 }
 
 var qPool = [
-	{"question" : "Question 1?",
-	"answer": "right answer",
-	"decoys": ["decoy1", "decoy2", "decoy3"]},
-	{"question" : "Question 2?",
-	"answer": "right answer2",
-	"decoys": ["decoy1", "decoy2", "decoy3"]}
-]
+	{"question" : "Which star is at the center of our Solar System?",
+	"answer": "The Sun",
+	"decoys": ["Proxima Centauri", "Tau Ceti", "Alpha Centauri A"]},
+
+	{"question" : "What is the diameter of the Sun?",
+	"answer": "1,392,684 km",
+	"decoys": ["2,342,123 km", "4,124,126 km", "9,422,902 km"]},
+
+	{"question" : "What percent of the solar system’s mass does the Sun hold?",
+	"answer": "99.8%",
+	"decoys": ["53.2%", "20.1%", "10.2%"]},
+
+	{"question" : "How much time does sun rays take to reach earth?",
+	"answer": "8 minutes",
+	"decoys": ["8 seconds", "8 hours", "8 days"]},
+
+	{"question" : "Which planet is known as the Morning Star?",
+	"answer": "Venus",
+	"decoys": ["Mars", "Mercury", "Pluto"]}
+];
+
 

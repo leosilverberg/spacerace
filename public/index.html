@@ -2,12 +2,16 @@
 <html>
 <head>
 	<link rel="stylesheet" href="style.css">
+	<link href="https://fonts.googleapis.com/css?family=Roboto+Mono:100,300,400,500" rel="stylesheet">
 
 </head>
 
 <body>
-	<canvas id="canvas"></canvas>
+<div id="gameArea">
 
+	</div>
+	<canvas id="canvas"></canvas>
+<div class="container">
 	<div id="gameStatus">
 	</div>
 
@@ -21,32 +25,49 @@
 		</div>
 	</div>
 
-	<div id="gameArea">
-
+	<div id="intro-screen">
+		<img class="bannerLogo" src="images/headerBlue.png" />
+		<button id="btnCreateGame" class="">CREATE GAME</button>
 	</div>
 
+	<div id="starting-screen">
+		<img class="bannerLogo" src="images/headerGreen.png" />
+		<br>
+		<br>
+		<br>
+		enter the following:
+		<div id="spanNewGameCode">ERROR!</div>
+		<br>
+		<be>
+		<button id="btnStartGame">START GAME</button>
+	</div>
+
+
+</div>
+
 	<script id="intro-screen-template" type="text/template">
-		<button id="btnJoinGame" class"btn">JOIN A GAME</button>
-	 	<button id="btnCreateGame" class="btn left">CREATE</button>
+		
+	 	
 	 </script>
 
 
 	 <script id="create-game-template" type="text/template">
-	 	<p>enter the following:</p>
-	 	<div id="spanNewGameCode">ERROR!</div>
-	 	<div id="playersWaiting"></div>
-	 	<button id="btnStartGame">START GAME</button>
+	 
 	 </script>
 
 
 	 <script id="join-game-template" type="text/template">
 	 	<label for="inputPlayerName">Your name: </label>
-	 	<input id="inputPlayerName" type="text" />
-
+	 	<br>
+	 	<input class="lg" id="inputPlayerName" type="text" />
+	 	<br>
+	 	<br>
 	 	<label for="inputGameId">enter a game id</label>
-	 	<input id="inputGameId" type="text" />
-
-	 	<button id="btnStart" class="btn"> START </button>
+	 	<br>
+	 	<input class="lg" id="inputGameId" type="text" />
+	 	<br>
+	 	<br>
+	 	<button id="btnStart" class="btn-lg"> START </button>
 	 </script>
 
 

@@ -2,6 +2,10 @@
 jQuery(function($){
 	'use strict'
 
+	$(function() {
+    FastClick.attach(document.body);
+});
+
 
 	///////////CANVAS SETUPS //////////
 	var canvas = document.getElementById('canvas'),
@@ -11,7 +15,7 @@ jQuery(function($){
 
      function resizeCanvas() {
                 canvas.width = window.innerWidth-20;
-                canvas.height = window.innerHeight-100;
+                canvas.height = window.innerHeight;
                 
             
                 //drawStuff(); 
@@ -19,8 +23,7 @@ jQuery(function($){
      resizeCanvas();
 
 
-
-          ///STARS
+     ///STARS
       stars1 = new starlayer(10,3,"#8b9fa5");
  stars2 = new starlayer(15,2,"#93a9b5");
  stars3 = new starlayer(20,1,"#bdc5c7");
@@ -35,15 +38,15 @@ function star() {
     	this.y = Math.floor(Math.random()*canvas.height);
     	this.color = starColors[Math.floor(Math.random()*starColors.length)];
     	this.move = function(speed) {
-        	this.x = this.x - speed;
-        		if (this.x<0) { 
-            		this.x = canvas.width;
-            		this.y = Math.floor(Math.random()*canvas.height);
+        	this.y = this.y + speed;
+        		if (this.y>canvas.height) { 
+            		this.y = 0;
+            		this.x = Math.floor(Math.random()*canvas.width);
         		}
     		}
    	 	this.draw = function(colour) {
         context.fillStyle = this.color;
-        context.fillRect(this.x,this.y,3,3);
+        context.fillRect(this.x,this.y,4,4);
     	}
 	};
 
@@ -82,7 +85,6 @@ function star_render() {
     
    
 }
-
 
 
 
@@ -161,12 +163,30 @@ function star_render() {
 		},
 
 		bindEvents: function(){
-			//events
-			App.$doc.on('click', '#btnCreateGame', App.Host.onCreateClick);
-			App.$doc.on('click', '#btnJoinGame', App.Player.onJoinClick);
-			App.$doc.on('click', '#btnStart', App.Player.onStartClick);
-			App.$doc.on('click', '#btnStartGame', App.Host.onStartGameClick);
-			App.$doc.on('click', '.btnAnswer', App.Player.onPlayerAnswerClick);
+			// events
+			// App.$doc.on('click', '#btnCreateGame', App.Host.onCreateClick);
+			// App.$doc.on('click', '#btnJoinGame', App.Player.onJoinClick);
+			// App.$doc.on('click', '#btnStart', App.Player.onStartClick);
+			// App.$doc.on('click', '#btnStartGame', App.Host.onStartGameClick);
+			// App.$doc.on('click', '.btnAnswer', App.Player.onPlayerAnswerClick);
+			// App.$doc.on('click', '#btnEnter',console.log("enter"));
+
+			$( "#btnEnter" ).click(function() {
+  				App.Player.onPlayerEnterClick();
+			});
+
+			$( "#btnJoinGame" ).click(function() {
+  				App.Player.onJoinClick();
+			});
+
+			$( "#btnStart" ).click(function() {
+  				App.Player.onStartClick();
+			});
+
+			$('body').on('click','.btnAnswer',function(){
+
+  				App.Player.onPlayerAnswerClick($(this).attr("value"));
+			});
 		},
 
 		/////GAME LOGIC///
@@ -187,8 +207,6 @@ function star_render() {
 			playersRight:0,
 
 			onCreateClick: function(){
-				$('#intro-screen').hide();
-				$('#starting-screen').show();
 				IO.socket.emit('hostCreateNewGame');
 			},
 
@@ -208,8 +226,7 @@ function star_render() {
 				//show new game screeen
 				App.$gameArea.html(App.$templateNewGame);
 
-				// $('#spanNewGameCode').text(App.gameId + " on " + App.myIp +"/join");
-				$('#spanNewGameCode').text(App.gameId + " on " + "192.168.0.15:8080" +"/join");
+				$('#spanNewGameCode').text(App.gameId + " on " + App.myIp);
 
 			},
 
@@ -230,7 +247,6 @@ function star_render() {
 
 			onStartGameClick: function(){
 				console.log("starting game");
-				$('#starting-screen').hide();
 				 IO.socket.emit('hostStartGame', App.gameId);
 			},
 
@@ -309,17 +325,13 @@ function star_render() {
 			renderBoard: function(){
 				App.Host.renderBackground();
 
-				var ship_sizer = 2.5;
-    			var ship_image = new Image();
-  				ship_image.src = 'images/spaceship1.png';
 
 				//playerBLOBS
     			context.fillStyle = "green";
     			for(var i = 0; i < App.Host.players.length ; i++){
     				if(App.Host.players[i].prevX < App.Host.players[i].x){
     					context.fillStyle = "green";
-    					context.drawImage(ship_image,App.Host.players[i].prevX+3,(120*i)+50)
-    				// context.fillRect(App.Host.players[i].prevX+3,(120*i)+50, 100,100);
+    				context.fillRect(App.Host.players[i].prevX+3,(120*i)+50, 100,100);
 
     				context.fillStyle = "white";
     				context.fillText(App.Host.players[i].playerName, App.Host.players[i].prevX+3, (120*i)+50);
@@ -328,9 +340,7 @@ function star_render() {
     				App.Host.players[i].right = false;
     			} else{
     				context.fillStyle = "green";
-
-    				context.drawImage(ship_image,App.Host.players[i].x,(120*i)+50)
-    				// context.fillRect(App.Host.players[i].x,(120*i)+50, 100,100);
+    				context.fillRect(App.Host.players[i].x,(120*i)+50, 100,100);
 
     				context.fillStyle = "white";
     				context.fillText(App.Host.players[i].playerName, App.Host.players[i].x, (120*i)+50);
@@ -390,9 +400,8 @@ function star_render() {
 			},
 
 			renderBackground: function(){
-				context.fillStyle = '#141f20';      
+				context.fillStyle = '#231C24';      
     			context.fillRect(0,0,canvas.width,canvas.height);
-    			star_render();
 
 				var boardSteps = App.Host.board.steps;
     			context.fillStyle = "red";
@@ -414,14 +423,30 @@ function star_render() {
 			currentQuestionData:"",
 			currentStep:0,
 			right:false,
+			gameData:'',
 
-			onJoinClick: function(){
-				App.$gameArea.html(App.$templateJoinGame);
-			},
+			// onJoinClick: function(){
+			// 	App.$gameArea.html(App.$templateJoinGame);
+			// },
 
 			onStartClick: function(){
 				//collect data to send to the server
-				var data = {
+				
+				//send the gameId and playername to the server
+				IO.socket.emit('playerJoinGame', App.Player.gameData);
+
+				App.myRole = 'Player';
+				App.Player.myName = App.Player.gameData.playerName;
+
+				$('#shipSelect').hide();
+
+				
+			},
+
+			onPlayerEnterClick: function(){
+				console.log("enter click");
+
+				App.Player.gameData = {
 					gameId : +($('#inputGameId').val()),
 					playerName : $('#inputPlayerName').val(),
 					playerId: App.mySocketId,
@@ -431,14 +456,8 @@ function star_render() {
 					prevX:0,
 					prevY:0
 				};
-
-				//send the gameId and playername to the server
-				IO.socket.emit('playerJoinGame', data);
-
-				App.myRole = 'Player';
-				App.Player.myName = data.playerName;
-
-				
+				$('#joinGame').hide();
+				$('#shipSelect').show();
 			},
 
 			updateWaitingScreen: function(data){
@@ -453,12 +472,12 @@ function star_render() {
 			newQuestion: function(data){
 				App.Player.isQuestionActive = true;
 				App.Player.currentQuestionData = data;
-				App.Player.renderBoard();
+				App.Player.renderQ();
 			},
 
-			onPlayerAnswerClick: function(){
-				var $btn = $(this);
-				var answer = $btn.val();
+			onPlayerAnswerClick: function(value){
+			
+				var answer = value;
 				console.log(answer);
 
 				var data = {
@@ -468,38 +487,55 @@ function star_render() {
 				};
 
 				IO.socket.emit('playerAnswer', data);
-			},
-
-			endRound:function(){
-				App.Player.isQuestionActive == false;
 				$('#playerQuestion').hide();
 				$('#playerQ').empty();
 				$('#playerAnswers').empty();
 			},
 
-			renderBoard: function(){
-				App.Player.renderBackground();
+			endRound:function(){
+				App.Player.isQuestionActive == false;
 
+			},
+
+			renderQ: function(){
 				if(App.Player.isQuestionActive){
     				$('#playerQuestion').show();
     				// $('#playerQuestion').empty();
     				$('#playerQ').append(App.Player.currentQuestionData.question);
 
     				for(var i=0; i<App.Player.currentQuestionData.decoys.length; i++){
-    					$('#playerAnswers').append('<button class="btnAnswer btn-lg" value="'+App.Player.currentQuestionData.decoys[i]+'">'+App.Player.currentQuestionData.decoys[i]+'</button><br><br>');
+    					$('#playerAnswers').append('<button class="btnAnswer " value="'+App.Player.currentQuestionData.decoys[i]+'">'+App.Player.currentQuestionData.decoys[i]+'</button><br><br>');
     				};
-    				$('#playerAnswers').append('<button class="btnAnswer btn-lg" value="'+App.Player.currentQuestionData.answer+'">'+App.Player.currentQuestionData.answer+'</button><br><br>');
+    				$('#playerAnswers').append('<button class="btnAnswer " value="'+App.Player.currentQuestionData.answer+'">'+App.Player.currentQuestionData.answer+'</button><br><br>');
     				
 
 
     			}
+			},
+
+			renderBoard: function(){
+				App.Player.renderBackground();
+
+				
 
 
 			},
 
 			renderBackground: function(){
-				context.fillStyle = '#231C24';      
+				context.fillStyle = '#141f20';      
     			context.fillRect(0,0,canvas.width,canvas.height);
+    			star_render();
+
+    			var ship_sizer = 2.5;
+    			var ship_image = new Image();
+  				ship_image.src = 'images/spaceship1.png';
+  				
+    			context.drawImage(ship_image, 
+    				(canvas.width/2)-((ship_image.width*ship_sizer)/2)
+    				, (canvas.height/2)-((ship_image.height*ship_sizer)/2)
+    				, ship_image.width*ship_sizer
+    				, ship_image.height*ship_sizer);
+  				
 
 				
 			}
@@ -513,7 +549,7 @@ function star_render() {
 
 	setInterval(function(){
 			
-			App.Host.renderBoard();
+			App.Player.renderBoard();
 
 		
 		}, 40);

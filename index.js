@@ -16,6 +16,7 @@ var sr = require('./spaceracegame');
 app.configure(function() {
 	//serve
 	app.use(express.static(path.join(__dirname,'public')));
+	app.use('/join', express.static(path.join(__dirname, 'join')));
 
 });
 

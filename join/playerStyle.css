@@ -1,0 +1,328 @@
+@font-face {
+    font-family: CityLight;
+    src: url(City-Light.otf);
+}
+
+/*@import url('https://fonts.googleapis.com/css?family=Roboto+Mono:100,300,400,500');*/
+body{
+	font-family: 'Roboto Mono', monospace;
+}
+
+canvas {
+    background: #231C24;
+}
+
+#gameStatus{
+	color:green;
+	position:absolute;
+	top:10px;
+}
+
+#currentQuestion{
+	width:200px;
+	height:300px;
+	position: absolute;
+	top:100px;
+	left:100px;
+	background-color:#2b2322;
+	color:black;
+	display:none;
+
+}
+
+
+
+#gameArea{
+	position:absolute;
+	bottom:70px;
+	color:white;
+}
+
+.btn-lg{
+	width:100vw;
+	font-size:50px;
+}
+
+.lg{
+	width:100vw;
+}
+
+#joinGame{
+	box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+	position: absolute;
+	top:0;
+	left:0;
+	height: 100vh;
+        width: 100vw;
+  background-color:#162d36;
+    text-align: center;
+    text-shadow: 0 0 5px #2cabfc;
+    color:#2cabfc;
+    border:7px solid #2cabfc;
+
+
+
+
+    /*display:none;*/
+
+  
+}
+
+#joinGame img{
+	padding-top:40px;
+	width:100%;
+	padding-bottom:40px;
+}
+
+
+
+
+
+#joinGame label{
+	text-align: left;
+	font-size:3em;
+	text-transform: uppercase;
+	letter-spacing: 5px;
+
+}
+
+input[type=text].blue {
+  -webkit-appearance: none; -moz-appearance: none;
+  display: inline-block;
+  /*margin: 0;*/
+  width: 80vw; 
+ 	font-size: 6em;
+  border: 2px solid #2cabfc;
+  text-align: center;
+  padding-top:20px;
+  padding-bottom:20px;
+  margin-bottom:50px;
+  background-color:rgba(0,0,0,0.1);
+  /*border-radius:10px;*/
+
+  color:#2cabfc;
+  text-shadow: 0 0 5px #2cabfc;
+}
+
+#playerQ{
+	font-size: 3.5em;
+	margin:20px;
+}
+
+.mainInput::-webkit-input-placeholder {
+  font-family: 'Roboto Mono', monospace;
+  letter-spacing: 5px;
+  color:#2cabfc;
+  font-weight: 300;
+}
+
+.mainInput:-ms-input-placeholder {
+  font-family: 'Roboto Mono', monospace;
+   letter-spacing: 5px;
+   color:#2cabfc;
+   font-weight: 300;
+}
+
+.mainInput:-moz-placeholder {
+  font-family: 'Roboto Mono', monospace;
+   letter-spacing: 5px;
+   color:#2cabfc;
+   font-weight: 300;
+}
+
+.mainInput::-moz-placeholder {
+  font-family: 'Roboto Mono', monospace;
+   letter-spacing: 5px;
+   color:#2cabfc;
+   font-weight: 300;
+}
+
+.scanlines {
+  background: linear-gradient(
+    to bottom,
+    rgba(255,255,255,0),
+    rgba(255,255,255,0) 50%,
+    rgba(0,0,0,0.2) 70%,
+    rgba(0,0,0,0.6)
+  );
+  background-size: 100% 0.3rem;
+  border-radius: 2rem;
+  position: absolute;
+  width:100vw;
+  height:100vh;
+  top:0;
+  left:0;
+
+  pointer-events: none;
+}
+
+#btnEnter{
+	font-family: 'Roboto Mono', monospace;
+	width:80vw;
+	font-size: 6em;
+	background-color:#2cabfc;
+	border:none;
+	padding:20px;
+	
+	color:#131E22 !important;
+
+	margin-top:20px;
+	text-shadow: 0 0 2px #131E22;
+	box-shadow: 0 0 5px #2cabfc;
+	font-weight: 300;
+}
+
+
+
+
+#shipSelect{
+	box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+	position: absolute;
+	top:0;
+	left:0;
+	height: 100vh;
+        width: 100vw;
+  
+    text-align: center;
+    text-shadow: 0 0 5px #4cf6a4;
+    color:#4cf6a4;
+    border:7px solid #4cf6a4;
+    background-color:#1a352d;
+
+    display:none;
+
+  
+}
+
+.bannerLogo {
+	padding-top:40px;
+	width:100%;
+	padding-bottom:40px;
+}
+
+
+
+
+
+#shipSelect label{
+	text-align: left;
+	font-size:3em;
+	text-transform: uppercase;
+	letter-spacing: 5px;
+
+}
+
+
+input[type=text].green {
+  -webkit-appearance: none; -moz-appearance: none;
+  display: inline-block;
+  /*margin: 0;*/
+  width: 80vw; 
+ 	font-size: 6em;
+  border: 2px solid #4cf6a4;
+  text-align: center;
+  padding-top:20px;
+  padding-bottom:20px;
+  margin-bottom:50px;
+  background-color:rgba(0,0,0,0.1);
+  /*border-radius:10px;*/
+
+  color:#4cf6a4;
+  text-shadow: 0 0 5px #4cf6a4;
+}
+
+.shipInput::-webkit-input-placeholder {
+  font-family: 'Roboto Mono', monospace;
+  letter-spacing: 5px;
+  color:#4cf6a4;
+  font-weight: 300;
+}
+
+.shipInput:-ms-input-placeholder {
+  font-family: 'Roboto Mono', monospace;
+   letter-spacing: 5px;
+   color:#4cf6a4;
+   font-weight: 300;
+}
+
+.shipInput:-moz-placeholder {
+  font-family: 'Roboto Mono', monospace;
+   letter-spacing: 5px;
+   color:#4cf6a4;
+   font-weight: 300;
+}
+
+.shipInput::-moz-placeholder {
+  font-family: 'Roboto Mono', monospace;
+   letter-spacing: 5px;
+   color:#4cf6a4;
+   font-weight: 300;
+}
+
+#btnStart{
+	font-family: 'Roboto Mono', monospace;
+	width:80vw;
+	font-size: 6em;
+	background-color:#4cf6a4;
+	border:none;
+	padding:20px;
+	
+	color:#131E22 !important;
+
+	margin-top:20px;
+	text-shadow: 0 0 2px #131E22;
+	box-shadow: 0 0 5px #4cf6a4;
+	font-weight: 300;
+}
+
+.pick-ship{
+	margin-top:50px;
+	margin-bottom:50px;
+	width:30vw;
+	border:solid 2px #4cf6a4;
+	padding:4em 7em 4em 7em;
+}
+
+/*player Q */
+
+#playerQuestion{
+	box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+
+	position:absolute;
+	top:0;
+	left:0;
+	width:100vw;
+	height:100vh;
+	background-color: #2b2322;
+	display:none;
+    text-align: center;
+
+    text-shadow: 0 0 5px #f84a30;
+    color:#f84a30;
+    border:7px solid #f84a30;
+    
+
+    display:none;
+}
+
+.btnAnswer{
+	font-family: 'Roboto Mono', monospace;
+	width:80vw;
+	font-size: 5em;
+	background-color:#f84a30;
+	border:none;
+	padding:20px;
+	
+	color:#131E22 !important;
+
+	margin-top:20px;
+	text-shadow: 0 0 2px #131E22;
+	box-shadow: 0 0 5px #f84a30;
+	font-weight: 300;
+}

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Mono:100,300,400,500" rel="stylesheet">
+	<link rel="stylesheet" href="playerStyle.css">
+
+
+</head>
+
+<body>
+<div id="gameArea">
+
+	</div>
+	
+
+	<div id="gameStatus">
+	</div>
+
+	<div id="currentQuestion">
+	</div>
+
+	<div id="joinGame">
+		<img class="bannerLogo" src="images/headerBlue.png" />
+		
+		<label for="inputPlayerName">enter your team name: </label>
+	 	<br>
+	 	<input class="lg mainInput blue" id="inputPlayerName" type="text" placeholder="TEAM NAME" />
+	 	<br>
+	 	<br>
+	 	<label for="inputGameId">enter a game id:</label>
+	 	<br>
+	 	<input class="lg mainInput blue" id="inputGameId" type="text" placeholder="GAME ID" />
+	 	<br>
+	 	<br>
+	 	<button id="btnEnter" class="btn"> JOIN GAME</button>
+	 	<!-- <button id="btnStart" class="btn"> JOIN GAME </button> -->
+	 	
+	</div>
+
+
+	<div id="shipSelect">
+		<img class="bannerLogo" src="images/headerGreen.png" />
+		<br>
+		<br>
+		<label for="inputPlayerName">pick a starship: </label>
+	 	<br>
+	 	<img class="pick-ship" src="images/spaceship1.png" />
+	 	
+	 	<br>
+	 	<br>
+	 	<!-- <button id="btnNext" class="btn"> NEXT</button> -->
+	 	<button id="btnStart" class="btn"> NEXT </button>
+	 	
+	</div>
+
+
+	<div id="playerQuestion">
+		<img class="bannerLogo" src="images/headerRed.png" />
+		<p id="playerQ"> </p>
+		<div id="playerAnswers">
+
+
+
+		</div>
+	</div>
+
+
+	<div class="scanlines">
+	</div>
+<canvas id="canvas"></canvas>
+	
+<!-- 
+	<script id="intro-screen-template" type="text/template">
+		<button id="btnJoinGame" class="btn-lg">JOIN A GAME</button>
+		<br>
+		<br>
+	 	<button id="btnCreateGame" class="btn-lg">CREATE</button>
+	 </script> -->
+
+
+	 <script id="create-game-template" type="text/template">
+	 	<p>enter the following:</p>
+	 	<div id="spanNewGameCode">ERROR!</div>
+	 	<div id="playersWaiting"></div>
+	 	<button id="btnStartGame">START GAME</button>
+	 </script>
+
+
+	 <script id="join-game-template" type="text/template">
+	 	
+	 </script>
+
+
+	 <script type='application/javascript' src='fastclick/lib/fastclick.js'></script>
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="playerApp.js"></script>
+</body>
+</html>
