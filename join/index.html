@@ -2,6 +2,7 @@
 <html>
 <head>
 <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:100,300,400,500" rel="stylesheet">
+<link rel="stylesheet" href="libs/swiper.min.css">
 	<link rel="stylesheet" href="playerStyle.css">
 
 
@@ -22,14 +23,14 @@
 	<div id="joinGame">
 		<img class="bannerLogo" src="images/headerBlue.png" />
 		
-		<label for="inputPlayerName">enter your team name: </label>
+		<label id="nameLabel" for="inputPlayerName">enter your team name: </label>
 	 	<br>
 	 	<input class="lg mainInput blue" id="inputPlayerName" type="text" placeholder="TEAM NAME" />
 	 	<br>
 	 	<br>
-	 	<label for="inputGameId">enter a game id:</label>
+	 	<label id="gameIdLabel" for="inputGameId">enter a game id:</label>
 	 	<br>
-	 	<input class="lg mainInput blue" id="inputGameId" type="text" placeholder="GAME ID" />
+	 	<input class="lg mainInput blue" id="inputGameId" type="number" placeholder="GAME ID" />
 	 	<br>
 	 	<br>
 	 	<button id="btnEnter" class="btn"> JOIN GAME</button>
@@ -42,14 +43,44 @@
 		<img class="bannerLogo" src="images/headerGreen.png" />
 		<br>
 		<br>
-		<label for="inputPlayerName">pick a starship: </label>
+		<label id="pickShipLabel" for="inputPlayerName">pick a starship: </label>
 	 	<br>
-	 	<img class="pick-ship" src="images/spaceship1.png" />
+
+
+	 	<div class="swiper-container">
+    
+    		<div class="swiper-wrapper">
+        
+        	<div class="swiper-slide ship-slide">
+        		<img class="pick-ship" src="images/spaceship1.png" />
+        		
+        	</div>
+
+        	<div class="swiper-slide ship-slide">
+        		<img class="pick-ship" src="images/spaceship2.png" />
+        	</div>
+
+        	<div class="swiper-slide ship-slide">
+        		<img class="pick-ship" src="images/spaceship3.png" />
+        	</div>
+
+        	<div class="swiper-slide ship-slide">
+        		<img class="pick-ship" src="images/spaceship4.png" />
+        	</div>
+     
+        
+    		</div>
+    
+    		<div class="swiper-pagination"></div>
+    
+ 		</div>
+
+	 <!-- 	<img class="pick-ship" src="images/spaceship1.png" /> -->
 	 	
 	 	<br>
-	 	<br>
+	
 	 	<!-- <button id="btnNext" class="btn"> NEXT</button> -->
-	 	<button id="btnStart" class="btn"> NEXT </button>
+	 	<button id="btnStart" class="btn"> ENGAGE! </button>
 	 	
 	</div>
 
@@ -91,9 +122,12 @@
 	 </script>
 
 
-	 <script type='application/javascript' src='fastclick/lib/fastclick.js'></script>
+	<script src="libs/fastclick.js"></script>
+	<script src="libs/baffle.min.js"></script>
 	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 	<script src="/socket.io/socket.io.js"></script>
+	<script src="libs/swiper.jquery.min.js"></script>
 	<script src="playerApp.js"></script>
+
 </body>
 </html>

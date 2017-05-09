@@ -310,15 +310,35 @@ function star_render() {
 				App.Host.renderBackground();
 
 				var ship_sizer = 2.5;
-    			var ship_image = new Image();
-  				ship_image.src = 'images/spaceship1.png';
+    			var ship_image1 = new Image();
+  				ship_image1.src = 'images/spaceship1.png';
+
+  				var ship_image2 = new Image();
+  				ship_image2.src = 'images/spaceship2.png';
+
+  				var ship_image3 = new Image();
+  				ship_image3.src = 'images/spaceship3.png';
+
+  				var ship_image4 = new Image();
+  				ship_image4.src = 'images/spaceship4.png';
 
 				//playerBLOBS
     			context.fillStyle = "green";
     			for(var i = 0; i < App.Host.players.length ; i++){
     				if(App.Host.players[i].prevX < App.Host.players[i].x){
     					context.fillStyle = "green";
-    					context.drawImage(ship_image,App.Host.players[i].prevX+3,(120*i)+50)
+    					if(App.Host.players[i].ship == 1){
+    						context.drawImage(ship_image1,App.Host.players[i].prevX+3,(120*i)+50)
+    					} else if(App.Host.players[i].ship == 2){
+    						context.drawImage(ship_image2,App.Host.players[i].prevX+3,(120*i)+50)
+    					} else if(App.Host.players[i].ship == 3){
+    						context.drawImage(ship_image3,App.Host.players[i].prevX+3,(120*i)+50)
+    					} else if(App.Host.players[i].ship == 4){
+    						context.drawImage(ship_image4,App.Host.players[i].prevX+3,(120*i)+50)
+    					} else{
+    						context.drawImage(ship_image1,App.Host.players[i].prevX+3,(120*i)+50)
+    					}
+    					
     				// context.fillRect(App.Host.players[i].prevX+3,(120*i)+50, 100,100);
 
     				context.fillStyle = "white";
@@ -329,11 +349,25 @@ function star_render() {
     			} else{
     				context.fillStyle = "green";
 
-    				context.drawImage(ship_image,App.Host.players[i].x,(120*i)+50)
+    				
+    				if(App.Host.players[i].ship == 1){
+    						context.drawImage(ship_image1,App.Host.players[i].x,(120*i)+50)
+    					} else if(App.Host.players[i].ship == 2){
+    						context.drawImage(ship_image2,App.Host.players[i].x,(120*i)+50)
+    					} else if(App.Host.players[i].ship == 3){
+    						context.drawImage(ship_image3,App.Host.players[i].x,(120*i)+50)
+    					} else if(App.Host.players[i].ship == 4){
+    						context.drawImage(ship_image4,App.Host.players[i].x,(120*i)+50)
+    					} else{
+    						context.drawImage(ship_image1,App.Host.players[i].x,(120*i)+50)
+    					}
+
     				// context.fillRect(App.Host.players[i].x,(120*i)+50, 100,100);
 
     				context.fillStyle = "white";
     				context.fillText(App.Host.players[i].playerName, App.Host.players[i].x, (120*i)+50);
+
+
     			}
 
     			// all moved

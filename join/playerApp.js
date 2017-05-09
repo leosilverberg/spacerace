@@ -1,10 +1,28 @@
 ;
 jQuery(function($){
 	'use strict'
+let nameLabelBaffle = baffle('#nameLabel');
+let gameIdLabelBaffle = baffle('#gameIdLabel');
+let pickShipLabelBaffle = baffle('#pickShipLabel');
+nameLabelBaffle.start();
+gameIdLabelBaffle.start();
+pickShipLabelBaffle.start();
 
-	$(function() {
+ var starSwiper = new Swiper();
+$(document).ready(function () {
+	console.log("window ready");
+    //initialize swiper when document ready  
+
+
+    $(function() {
     FastClick.attach(document.body);
-});
+});   
+
+nameLabelBaffle.reveal(1000);
+gameIdLabelBaffle.reveal(1000);    
+  });
+
+
 
 
 	///////////CANVAS SETUPS //////////
@@ -424,6 +442,9 @@ function star_render() {
 			currentStep:0,
 			right:false,
 			gameData:'',
+			ship:0,
+			shipAnimating:false,
+			ship_sizer:2.5,
 
 			// onJoinClick: function(){
 			// 	App.$gameArea.html(App.$templateJoinGame);
@@ -431,6 +452,8 @@ function star_render() {
 
 			onStartClick: function(){
 				//collect data to send to the server
+				App.Player.ship = starSwiper.activeIndex;
+				App.Player.gameData.ship = App.Player.ship;
 				
 				//send the gameId and playername to the server
 				IO.socket.emit('playerJoinGame', App.Player.gameData);
@@ -439,12 +462,15 @@ function star_render() {
 				App.Player.myName = App.Player.gameData.playerName;
 
 				$('#shipSelect').hide();
+				$('.scanlines').hide();
 
+				App.Player.popInShip();
 				
 			},
 
 			onPlayerEnterClick: function(){
 				console.log("enter click");
+				pickShipLabelBaffle.reveal(1000)
 
 				App.Player.gameData = {
 					gameId : +($('#inputGameId').val()),
@@ -454,10 +480,21 @@ function star_render() {
 					y : 0,
 					step: App.Player.currentStep,
 					prevX:0,
-					prevY:0
+					prevY:0,
+					ship:0
 				};
 				$('#joinGame').hide();
 				$('#shipSelect').show();
+				 starSwiper = new Swiper ('.swiper-container', {
+      				// Optional parameters
+      				direction: 'horizontal',
+      				loop: true,
+      				pagination: '.swiper-pagination',
+      				effect:'coverflow',
+      				coverflow: {
+      					slideShadows:false
+      				}
+    				});
 			},
 
 			updateWaitingScreen: function(data){
@@ -514,7 +551,11 @@ function star_render() {
 			},
 
 			renderBoard: function(){
-				App.Player.renderBackground();
+				
+					App.Player.renderBackground();
+					App.Player.renderShip();
+			
+				
 
 				
 
@@ -526,18 +567,49 @@ function star_render() {
     			context.fillRect(0,0,canvas.width,canvas.height);
     			star_render();
 
-    			var ship_sizer = 2.5;
-    			var ship_image = new Image();
-  				ship_image.src = 'images/spaceship1.png';
-  				
-    			context.drawImage(ship_image, 
-    				(canvas.width/2)-((ship_image.width*ship_sizer)/2)
-    				, (canvas.height/2)-((ship_image.height*ship_sizer)/2)
-    				, ship_image.width*ship_sizer
-    				, ship_image.height*ship_sizer);
+    			
   				
 
 				
+			},
+
+			renderShip: function(){
+				
+				var ship_sizer_standard = 2.5;
+    			var ship_image = new Image();
+  				ship_image.src = 'images/spaceship'+App.Player.ship+'.png';
+  				
+  				if(App.Player.shipAnimating == false){
+  					context.drawImage(ship_image, 
+    				(canvas.width/2)-((ship_image.width*App.Player.ship_sizer)/2)
+    				, (canvas.height/2)-((ship_image.height*App.Player.ship_sizer)/2)
+    				, ship_image.width*App.Player.ship_sizer
+    				, ship_image.height*App.Player.ship_sizer);
+  				} else if(App.Player.shipAnimating == "popin"){
+
+  					if(App.Player.ship_sizer < ship_sizer_standard){
+  						var sizing_speed = 0.06;
+
+  						App.Player.ship_sizer = App.Player.ship_sizer + sizing_speed;
+  						context.drawImage(ship_image, 
+    					(canvas.width/2)-((ship_image.width*App.Player.ship_sizer)/2)
+    					, (canvas.height/2)-((ship_image.height*App.Player.ship_sizer)/2)
+    					, ship_image.width*App.Player.ship_sizer
+    					, ship_image.height*App.Player.ship_sizer);
+
+  					} else{
+  						App.Player.shipAnimating = false;
+  					}
+  					
+  				}
+    			
+			},
+
+			popInShip: function(){
+				App.Player.shipAnimating = "popin";
+				App.Player.ship_sizer= 0;
+				
+
 			}
 		}
 

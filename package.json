@@ -8,7 +8,8 @@
     "grunt": "^1.0.1",
     "grunt-contrib-watch": "^1.0.0",
     "grunt-express": "^1.4.1",
-    "socket.io": "0.9"
+    "socket.io": "0.9",
+    "swiper": "^3.4.2"
   },
   "main": "index.js",
   "devDependencies": {
