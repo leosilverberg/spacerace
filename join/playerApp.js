@@ -525,6 +525,7 @@ function star_render() {
 
 				IO.socket.emit('playerAnswer', data);
 				$('#playerQuestion').hide();
+				$('.scanlines').hide();
 				$('#playerQ').empty();
 				$('#playerAnswers').empty();
 			},
@@ -532,10 +533,12 @@ function star_render() {
 			endRound:function(){
 				App.Player.isQuestionActive == false;
 
+
 			},
 
 			renderQ: function(){
 				if(App.Player.isQuestionActive){
+					$('.scanlines').show();
     				$('#playerQuestion').show();
     				// $('#playerQuestion').empty();
     				$('#playerQ').append(App.Player.currentQuestionData.question);
